@@ -1,4 +1,4 @@
-def get_hand_gesture_name(finger_count=0):
+def gesture_mapper(finger_count=0):
   """
   Returns the name of the hand gesture based on the number of fingers.
 

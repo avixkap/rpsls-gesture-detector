@@ -1,2 +1,2 @@
-from .gesture import get_hand_gesture_name
-from .winner import get_winner
+from .gesture_mapper import gesture_mapper
+from .game_round_result import game_round_result

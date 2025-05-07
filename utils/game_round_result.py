@@ -1,4 +1,4 @@
-def get_winner(player, computer):
+def game_round_result(player, computer):
     """
     Determines the outcome of a Rock-Paper-Scissors-Lizard-Spock game round.
 
