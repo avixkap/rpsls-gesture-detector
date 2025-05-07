@@ -1,0 +1,2 @@
+IMAGE_DIR = "assets"
+FRAME_SIZE = (700, 550)
