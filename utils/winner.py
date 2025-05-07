@@ -25,7 +25,11 @@ def get_winner(player, computer):
     "Scissors": ["Paper", "Lizard"],
     "Lizard": ["Spock", "Paper"],
     "Spock": ["Rock", "Scissors"],
-}
+    }
 
-if computer in winning_combinations[player]:
-    return "You Win"
+    if player == computer:
+        return "Draw"
+    elif computer in winning_combinations[player]:
+        return "You Win"
+    else:
+        return "You Lose"
