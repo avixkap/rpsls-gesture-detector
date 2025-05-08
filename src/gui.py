@@ -132,3 +132,38 @@ class RPSGui:
             self.p_result_label.config(text=f"You: {self.gesture_name}")
 
         self.root.after(10, self.update_video)
+
+    def play(self):
+        if not self.gesture_name or self.gesture_name not in CHOICES:
+            self.result_label.config(text="Show a valid hand gesture!")
+            return
+
+        player = self.gesture_name
+        computer = random.choice(CHOICES)
+        self.c_result_label.config(text=f"Computer: {computer}")
+
+        imgtk = random_pose(computer)
+        if imgtk:
+            self.image_label.imgtk = imgtk
+            self.image_label.configure(image=imgtk)
+
+        result, self.player_score, self.computer_score = game_round_result(
+            player, computer, self.player_score, self.computer_score
+        )
+
+        self.result_label.config(text=result)
+        self.update_score()
+
+    def update_score(self):
+        self.score_display.config(
+            text=f"Player: {self.player_score}     Computer: {self.computer_score}"
+        )
+
+    def reset(self):
+        self.result_label.config(text="")
+        self.player_score = 0
+        self.computer_score = 0
+        self.update_score()
+        self.image_label.config(image="")
+        self.p_result_label.config(text="You:")
+        self.c_result_label.config(text="Computer:")
