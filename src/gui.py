@@ -8,7 +8,7 @@ from utils import gesture_mapper, random_pose, game_round_result
 
 
 class RPSGui:
-    def _init_(self, root):
+    def __init__(self, root):
         self.root = root
         self.root.title("Rock Paper Scissors Lizard Spock")
         self.root.configure(bg="white")
@@ -88,18 +88,7 @@ class RPSGui:
         self.image_label = Label(computer_frame, bg="lightgray", width=FRAME_WIDTH, height=FRAME_HEIGHT)
         self.image_label.pack()
 
-    def update_video(self):
-        frame_imgtk, self.num_frames, finger_count = self.detector.process(self.num_frames)
-        if frame_imgtk:
-            self.video_label.imgtk = frame_imgtk
-            self.video_label.configure(image=frame_imgtk)
-
-        if finger_count is not None:
-            self.gesture_name = gesture_mapper(finger_count)
-            self.p_result_label.config(text=f"YOU: {self.gesture_name}")
-        self.root.after(10, self.update_video)
-
-        @staticmethod
+    @staticmethod
     def create_fixed_label(parent, caption_text):
         box = tk.Frame(parent, width=345, height=300, bg="white")
         box.pack_propagate(False)
