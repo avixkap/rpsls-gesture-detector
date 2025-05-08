@@ -58,3 +58,18 @@ class RPSGui:
                                                                                                         padx=5)
         tk.Button(btn_frame, text="Reset Score", command=self.reset).pack(side="left", padx=5)
         tk.Button(btn_frame, text="Rules", command=show_rules).pack(side="left", padx=5)
+
+        self.detector = GestureDetector(ROI, FRAME_SIZE)
+
+        self.update_video()
+
+    def update_video(self):
+        frame_imgtk, self.num_frames, finger_count = self.detector.process(self.num_frames)
+        if frame_imgtk:
+            self.video_label.imgtk = frame_imgtk
+            self.video_label.configure(image=frame_imgtk)
+
+        if finger_count is not None:
+            self.gesture_name = gesture_mapper(finger_count)
+            self.p_result_label.config(text=f"YOU: {self.gesture_name}")
+        self.root.after(10, self.update_video)
