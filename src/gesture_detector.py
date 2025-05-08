@@ -67,3 +67,18 @@ class GestureDetector:
                         finger_count += 1
 
         return min(finger_count + 1, 5)
+    
+    @staticmethod
+    def _draw_feedback(frame, text, pos=(10, 30), color=(0, 0, 255), scale=0.7):
+        """Draw text feedback on frame."""
+        cv2.putText(frame, text, pos, cv2.FONT_HERSHEY_SIMPLEX, scale, color, 2)
+
+    @staticmethod
+    def _draw_roi_box(frame, top, right, bottom, left):
+        """Draw ROI box on the video frame."""
+        cv2.rectangle(frame, (left, top), (right, bottom), (0, 255, 0), 2)
+
+    def _calculate_fps(self, num_frames):
+        """Calculate frames per second."""
+        elapsed_time = time.time() - self.start_time + 1e-6
+        return num_frames / elapsed_time
