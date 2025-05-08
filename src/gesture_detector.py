@@ -41,3 +41,49 @@ class GestureDetector:
 
         segmented = max(contours, key=cv2.contourArea)
         return thresholded, segmented
+
+    @staticmethod
+    def _count_fingers(contour):
+        """Count fingers from the hand contour using convexity defects."""
+        finger_count = 0
+        hull = cv2.convexHull(contour, returnPoints=False)
+
+        if hull is not None and len(hull) > 3:
+            defects = cv2.convexityDefects(contour, hull)
+            if defects is not None:
+                for i in range(defects.shape[0]):
+                    s, e, f, d = defects[i, 0]
+                    start = tuple(contour[s][0])
+                    end = tuple(contour[e][0])
+                    far = tuple(contour[f][0])
+
+                    a = np.linalg.norm(np.array(end) - np.array(start))
+                    b = np.linalg.norm(np.array(far) - np.array(start))
+                    c = np.linalg.norm(np.array(end) - np.array(far))
+
+                    angle = np.arccos((b ** 2 + c ** 2 - a ** 2) / (2 * b * c + 1e-6))
+
+                    if angle <= np.pi / 2 and d > 30:
+                        finger_count += 1
+
+        return min(finger_count + 1, 5)
+    
+    @staticmethod
+    def _draw_feedback(frame, text, pos=(10, 30), color=(0, 0, 255), scale=0.7):
+        """Draw text feedback on frame."""
+        cv2.putText(frame, text, pos, cv2.FONT_HERSHEY_SIMPLEX, scale, color, 2)
+
+    @staticmethod
+    def _draw_roi_box(frame, top, right, bottom, left):
+        """Draw ROI box on the video frame."""
+        cv2.rectangle(frame, (left, top), (right, bottom), (0, 255, 0), 2)
+
+    def _calculate_fps(self, num_frames):
+        """Calculate frames per second."""
+        elapsed_time = time.time() - self.start_time + 1e-6
+        return num_frames / elapsed_time
+    
+    def _del_(self):
+        """Release video capture on destruction."""
+        if self.cap.isOpened():
+            self.cap.release()
