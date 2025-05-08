@@ -60,8 +60,5 @@ Follow these steps to set up the project on your local machine:
    ```bash
    python main.py
    ```
-
-6. **Optional: Extend to RPSLS**  
-   To extend the game to include Lizard and Spock, modify the game logic in [`gui/game.py`](gui/game.py).
-
+   
 You're all set! Enjoy playing Rock-Paper-Scissors with gesture detection! 🎮🖐️
