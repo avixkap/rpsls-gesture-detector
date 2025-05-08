@@ -98,3 +98,37 @@ class RPSGui:
             self.gesture_name = gesture_mapper(finger_count)
             self.p_result_label.config(text=f"YOU: {self.gesture_name}")
         self.root.after(10, self.update_video)
+
+        @staticmethod
+    def create_fixed_label(parent, caption_text):
+        box = tk.Frame(parent, width=345, height=300, bg="white")
+        box.pack_propagate(False)
+
+        image_label = Label(box, bg="lightgray", width=345, height=260)
+        image_label.pack()
+
+        caption_label = Label(box, text=caption_text, font=("Arial", 15), bg="white")
+        caption_label.pack()
+
+        return box, image_label
+
+    def update_video(self):
+        frame_imgtk, self.num_frames, finger_count, gray, thresholded = self.detector.process(self.num_frames)
+
+        if frame_imgtk:
+            self.video_label.imgtk = frame_imgtk
+            self.video_label.configure(image=frame_imgtk)
+
+        if gray:
+            self.greyscale_label.imgtk = gray
+            self.greyscale_label.configure(image=gray)
+
+        if thresholded:
+            self.threshold_label.imgtk = thresholded
+            self.threshold_label.configure(image=thresholded)
+
+        if finger_count is not None:
+            self.gesture_name = gesture_mapper(finger_count)
+            self.p_result_label.config(text=f"You: {self.gesture_name}")
+
+        self.root.after(10, self.update_video)
