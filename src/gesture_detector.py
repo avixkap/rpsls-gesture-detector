@@ -16,24 +16,6 @@ class GestureDetector:
         self.finger_count = 0
         self.cap = cv2.VideoCapture(0)
 
-import time
-
-import cv2
-import numpy as np
-from PIL import Image, ImageTk
-
-from utils import gesture_mapper
-
-
-class GestureDetector:
-    def _init_(self, roi, frame_size):
-        self.roi = roi
-        self.frame_size = frame_size
-        self.start_time = time.time()
-        self.bg_model = None
-        self.finger_count = 0
-        self.cap = cv2.VideoCapture(0)
-
     def run_avg(self, image, a_weight=0.5):
         if self.bg_model is None:
             self.bg_model = image.copy().astype("float")
