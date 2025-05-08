@@ -133,7 +133,7 @@ class RPSGui:
 
         self.root.after(10, self.update_video)
 
-        def play(self):
+    def play(self):
         if not self.gesture_name or self.gesture_name not in CHOICES:
             self.result_label.config(text="Show a valid hand gesture!")
             return
