@@ -82,3 +82,8 @@ class GestureDetector:
         """Calculate frames per second."""
         elapsed_time = time.time() - self.start_time + 1e-6
         return num_frames / elapsed_time
+    
+    def _del_(self):
+        """Release video capture on destruction."""
+        if self.cap.isOpened():
+            self.cap.release()
