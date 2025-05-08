@@ -1,8 +1,10 @@
 import os
 import random
+
 from PIL import Image, ImageTk
 
 from constants import IMAGE_DIR, FRAME_SIZE
+
 
 def random_pose(file_name):
     if not os.path.exists(IMAGE_DIR):
