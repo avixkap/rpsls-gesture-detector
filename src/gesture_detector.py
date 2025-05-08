@@ -81,9 +81,57 @@ class GestureDetector:
     def _calculate_fps(self, num_frames):
         """Calculate frames per second."""
         elapsed_time = time.time() - self.start_time + 1e-6
-        return num_frames / elapsed_time
-    
-    def _del_(self):
+        return num_frames / elapsed_time
+
+    def process(self, num_frames):
+        """Main processing loop: read, process, and annotate video frame."""
+        top, right, bottom, left = self.roi
+        ret, frame = self.cap.read()
+
+        if not ret:
+            return None, num_frames, None, None, None
+
+        # Preprocess frame
+        frame = cv2.resize(frame, self.frame_size)
+        frame = cv2.flip(frame, 1)
+        clone = frame.copy()
+
+        # Extract ROI and process
+        roi = frame[top:bottom, right:left]
+        gray = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
+        gray = cv2.GaussianBlur(gray, (9, 9), 0)
+
+        thresholded = None
+
+        if num_frames < 60:
+            self.run_avg(gray)
+            self._draw_feedback(clone, "Calibrating background...")
+        else:
+            hand = self.segment(gray)
+            if hand:
+                thresholded, segmented = hand
+                self.finger_count = self._count_fingers(segmented)
+                gesture_name = gesture_mapper(self.finger_count)
+                self._draw_feedback(clone, f"Pose: {gesture_name}", pos=(70, 60), scale=1.0)
+
+                # Draw contour relative to full frame
+                cv2.drawContours(clone, [segmented + (right, top)], -1, (0, 0, 255), 2)
+
+        # Draw ROI box and FPS
+        self._draw_roi_box(clone, top, right, bottom, left)
+        fps = self._calculate_fps(num_frames)
+        self._draw_feedback(clone, f"FPS: {fps:.1f}", pos=(30, 400), color=(100, 255, 100), scale=0.6)
+
+        # Convert for Tkinter display
+        img = cv2.cvtColor(clone, cv2.COLOR_BGR2RGB)
+        frame_imgtk = ImageTk.PhotoImage(Image.fromarray(img))
+        gray_imgtk = ImageTk.PhotoImage(Image.fromarray(gray))
+        threshold_imgtk = ImageTk.PhotoImage(Image.fromarray(thresholded)) if thresholded is not None else None
+
+        num_frames += 1
+        return frame_imgtk, num_frames, self.finger_count, gray_imgtk, threshold_imgtk
+
+    def __del__(self):
         """Release video capture on destruction."""
         if self.cap.isOpened():
             self.cap.release()
