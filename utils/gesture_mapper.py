@@ -18,4 +18,4 @@ def gesture_mapper(finger_count=0):
     }
 
     # Return the gesture name or "Lizard" if the count is not in the mapping
-    return finger_count_to_name.get(finger_count, "Lizard")
+    return finger_count_to_name.get(finger_count, "Rock")
