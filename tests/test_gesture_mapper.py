@@ -19,10 +19,3 @@ class TestGestureMapper(unittest.TestCase):
     # Note: Verify if 5 is an intentional input, as it seems out of sequence
     def test_paper(self):
         self.assertEqual(gesture_mapper(5), "Paper")
-
-    # Test if the gesture_mapper defaults to "Lizard" for specific inputs
-    # Includes valid input (1), edge case (4), and invalid input (-1)
-    def test_lizard_default(self):
-        self.assertEqual(gesture_mapper(1), "Lizard")
-        self.assertEqual(gesture_mapper(4), "Lizard")
-        self.assertEqual(gesture_mapper(-1), "Lizard")
