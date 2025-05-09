@@ -41,6 +41,9 @@ class GestureDetector:
         self.finger_count = 0  # Number of detected fingers
         self.cap = cv2.VideoCapture(0)  # Open default webcam
 
+        if not self.cap.isOpened():
+            raise RuntimeError("Unable to access the webcam.")
+
     def run_avg(self, image, a_weight=0.5):
         """Accumulate the background model."""
         if self.bg_model is None:
