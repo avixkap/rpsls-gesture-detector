@@ -14,7 +14,7 @@
 - Python
 - OpenCV
 - NumPy
-- Matplotlib (for step-by-step visualizations)
+- Tkinter
 
 ## 🚀 Installation
 
